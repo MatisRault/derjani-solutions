@@ -34,7 +34,7 @@ const Hero = () => {
 
       {/* Hero Content */}
       <div className="relative z-30 h-full flex items-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+        <div className="px-32 sm:px-40 lg:px-48 w-full">
           <div className="max-w-2xl text-white">
           <H1 className="mb-6 text-white drop-shadow-2xl">
             Derjani Group

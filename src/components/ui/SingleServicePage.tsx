@@ -5,7 +5,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useContactModal } from '@/contexts/ContactModalContext';
 import Navigation from './Navigation';
 import { PageBanner } from './PageBanner';
-import { ReassuranceBanner } from './Hero';
+import ReassuranceBanner from './ReassuranceBanner';
 import ContactForm from './ContactForm';
 import GlobalContactModal from './GlobalContactModal';
 
@@ -30,8 +30,8 @@ const ServiceOverview = ({ serviceKey }: { serviceKey: string }) => {
   return (
     <section className="w-full bg-white py-16">
       <div className="px-32 sm:px-40 lg:px-48">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-bordeaux-600 mb-8 text-center">
+        <div className="max-w-4xl">
+          <h2 className="text-4xl font-bold text-bordeaux-600 mb-8 text-left">
             {t(`service.${serviceKey}.overview.title`)}
           </h2>
           
@@ -158,23 +158,35 @@ const ServiceExpertise = ({ serviceKey }: { serviceKey: string }) => {
   );
 };
 
-const ServiceCTA = () => {
+const ServiceCTA = ({ backgroundImage }: { backgroundImage: string }) => {
   const { t } = useLanguage();
   const { openContactModal } = useContactModal();
   
   return (
-    <section className="w-full bg-gray-900 py-16">
-      <div className="px-32 sm:px-40 lg:px-48">
+    <section className="relative w-full py-16 overflow-hidden">
+      {/* Image de fond */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('${backgroundImage}')`
+        }}
+      />
+      
+      {/* Voile sombre */}
+      <div className="absolute inset-0 bg-black/40" />
+      
+      {/* Contenu */}
+      <div className="relative z-10 px-32 sm:px-40 lg:px-48">
         <div className="text-center max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-white mb-6">
+          <h2 className="text-4xl font-bold text-white mb-6 drop-shadow-lg">
             {t('service.cta.title')}
           </h2>
-          <p className="text-xl text-gray-300 mb-8">
+          <p className="text-xl text-gray-200 mb-8 drop-shadow-lg">
             {t('service.cta.subtitle')}
           </p>
           <button
             onClick={openContactModal}
-            className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold bg-bordeaux-500 text-white rounded-lg transition-all duration-200 hover:bg-bordeaux-600 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold bg-bordeaux-500 text-white rounded-lg transition-all duration-200 hover:bg-bordeaux-600 shadow-lg hover:shadow-xl transform hover:-translate-y-1 drop-shadow-lg"
           >
             {t('service.cta.button')}
             <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -275,9 +287,9 @@ const SingleServicePage: React.FC<SingleServicePageProps> = ({ serviceData }) =>
         <ServiceExpertise serviceKey={serviceData.key} />
       )}
       
-      <ServiceCTA />
-      
       <RelatedServices currentService={serviceData.key} />
+      
+      <ServiceCTA backgroundImage={serviceData.heroImage} />
       
       <ContactForm />
       

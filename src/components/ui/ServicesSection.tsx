@@ -128,7 +128,7 @@ const ServicesSection = () => {
         </div>
 
         {/* Grille de services */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-8">
           {services.map((service) => (
             <ServiceCard 
               key={service.id} 
@@ -138,15 +138,6 @@ const ServicesSection = () => {
           ))}
         </div>
 
-        {/* Call to action */}
-        <div className="text-center mt-16">
-          <button className="inline-flex items-center justify-center px-8 py-4 text-lg font-medium rounded-lg transition-all duration-200 bg-bordeaux-500 text-white hover:bg-bordeaux-600 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-            {t('hero.cta')}
-            <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </button>
-        </div>
       </div>
     </section>
   );

@@ -30,33 +30,32 @@ const Hero = () => {
       </video>
 
       {/* Overlay for better text readability */}
-      <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 z-10"></div>
+      <div className="absolute top-0 left-0 w-full h-full bg-black/20 z-10"></div>
 
       {/* Hero Content */}
-      <div className="relative z-30 h-full flex items-center justify-center">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+      <div className="relative z-30 h-full flex items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="max-w-2xl text-white">
           <H1 className="mb-6 text-white drop-shadow-2xl">
-            Bienvenue chez Derjani Group
+            Derjani Group
           </H1>
           
-          <p className="text-lg md:text-xl lg:text-2xl font-light leading-relaxed mb-8 drop-shadow-lg max-w-3xl mx-auto">
-            Depuis 1988, Derjani Group met son expertise au service des projets les plus ambitieux au Liban et à l'international. 
-            Leader dans la construction, la génération d'énergie, la sécurité, la fourniture et les services, nous accompagnons nos clients – 
-            des particuliers aux institutions internationales – avec professionnalisme, précision et respect des délais.
+          <p className="text-lg md:text-xl font-light leading-relaxed mb-10 drop-shadow-lg">
+            Depuis 1988, votre partenaire de confiance pour des solutions d'excellence. 
+            Construction, énergie, sécurité - nous réalisons vos projets avec expertise et fiabilité.
           </p>
 
-          <p className="text-base md:text-lg font-light leading-relaxed mb-10 drop-shadow-lg">
-            Présents à Beyrouth, Abu Dhabi, Dubaï, Irak, Afghanistan, Tunisie, Koweït, Soudan du Sud et Nigeria, 
-            nous offrons des solutions complètes et sur mesure.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4">
             <Button variant="primary" size="lg" className="drop-shadow-lg">
-              Découvrir nos services
+              Nous contacter
             </Button>
-            <Button variant="transparent" size="lg" className="text-white border-white hover:bg-white hover:text-bordeaux-500 drop-shadow-lg">
-              Nos réalisations
-            </Button>
+            <a href="tel:+33123456789" className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-bordeaux-500 transition-colors drop-shadow-lg">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+              </svg>
+              +33 1 23 45 67 89
+            </a>
+          </div>
           </div>
         </div>
       </div>

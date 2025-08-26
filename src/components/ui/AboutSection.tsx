@@ -11,14 +11,14 @@ const AboutSection = () => {
   return (
     <section className="w-full bg-gray-50 py-16">
       <div className="px-32 sm:px-40 lg:px-48">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="flex flex-col lg:flex-row gap-12">
           
-          {/* Image à gauche */}
-          <div className="relative">
+          {/* Image à gauche - prend la même hauteur que le contenu */}
+          <div className="relative flex-1">
             <img
-              src="/assets/about-image.jpg"
+              src="/assets/services/securite.jpg"
               alt={t('about1.title')}
-              className="w-full h-96 object-cover rounded-lg shadow-lg"
+              className="w-full h-full object-cover rounded-lg shadow-lg"
               onError={(e) => {
                 // Fallback si l'image n'existe pas
                 const target = e.target as HTMLImageElement;
@@ -28,7 +28,7 @@ const AboutSection = () => {
           </div>
 
           {/* Contenu à droite */}
-          <div className="space-y-6">
+          <div className="space-y-6 flex-1">
             <h2 className="text-4xl font-bold text-bordeaux-600">
               {t('about1.title')}
             </h2>

@@ -11,7 +11,7 @@ interface PageBannerProps {
   title: string;
   description?: string;
   backgroundImage?: string;
-  breadcrumbs: BreadcrumbItem[];
+  breadcrumbs?: BreadcrumbItem[];
 }
 
 export const PageBanner: React.FC<PageBannerProps> = ({ 
@@ -38,9 +38,11 @@ export const PageBanner: React.FC<PageBannerProps> = ({
       <div className="relative z-10 px-32 sm:px-40 lg:px-48 py-32 min-h-[50vh] flex flex-col justify-center">
         <div className="max-w-6xl">
           {/* Breadcrumb */}
-          <div className="mb-8">
-            <Breadcrumb items={breadcrumbs} />
-          </div>
+          {breadcrumbs && (
+            <div className="mb-8">
+              <Breadcrumb items={breadcrumbs} />
+            </div>
+          )}
           
           {/* Title */}
           <H1 className="text-white mb-4 text-3xl font-bold">

@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { H4, H5, Paragraph } from './Typography';
+import { useRouter, usePathname } from 'next/navigation';
+import Link from 'next/link';
 import LanguageToggle from './LanguageToggle';
 import { useContactModal } from '@/contexts/ContactModalContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -10,55 +11,58 @@ interface Service {
   id: string;
   name: string;
   description: string;
-  image: string;
+  href: string;
 }
 
 const Navigation = () => {
-  const [activeService, setActiveService] = useState<string>('construction');
+  const router = useRouter();
+  const pathname = usePathname();
   const [showServicesMenu, setShowServicesMenu] = useState(false);
   const [showAboutMenu, setShowAboutMenu] = useState(false);
   const [showRealisationsMenu, setShowRealisationsMenu] = useState(false);
   const [showEngagementsMenu, setShowEngagementsMenu] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [mobileView, setMobileView] = useState<'main' | 'services'>('main');
   const { openContactModal } = useContactModal();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const services: Service[] = [
     {
       id: 'construction',
-      name: t('megamenu.services.construction.name'),
-      description: t('megamenu.services.construction.desc'),
-      image: '/assets/services/construction.jpg'
+      name: t('services.construction.title'),
+      description: t('services.construction.desc'),
+      href: language === 'en' ? '/en/services/construction' : '/services/construction'
     },
     {
-      id: 'energie',
-      name: t('megamenu.services.energie.name'),
-      description: t('megamenu.services.energie.desc'),
-      image: '/assets/services/energie.jpg'
+      id: 'power',
+      name: t('services.power.title'),
+      description: t('services.power.desc'),
+      href: language === 'en' ? '/en/services/power' : '/services/power'
     },
     {
-      id: 'securite',
-      name: t('megamenu.services.securite.name'),
-      description: t('megamenu.services.securite.desc'),
-      image: '/assets/services/securite.jpg'
+      id: 'security',
+      name: t('services.security.title'),
+      description: t('services.security.desc'),
+      href: language === 'en' ? '/en/services/security' : '/services/security'
     },
     {
-      id: 'fourniture',
-      name: t('megamenu.services.fourniture.name'),
-      description: t('megamenu.services.fourniture.desc'),
-      image: '/assets/services/fourniture.jpg'
+      id: 'supply',
+      name: t('services.supply.title'),
+      description: t('services.supply.desc'),
+      href: language === 'en' ? '/en/services/supply' : '/services/supply'
     },
     {
-      id: 'services-tech',
-      name: t('megamenu.services.services.name'),
-      description: t('megamenu.services.services.desc'),
-      image: '/assets/services/services.jpg'
+      id: 'services',
+      name: t('services.services.title'),
+      description: t('services.services.desc'),
+      href: language === 'en' ? '/en/services/services' : '/services/services'
     },
     {
-      id: 'rh',
-      name: t('megamenu.services.rh.name'),
-      description: t('megamenu.services.rh.desc'),
-      image: '/assets/services/rh.jpg'
+      id: 'manpower',
+      name: t('services.manpower.title'),
+      description: t('services.manpower.desc'),
+      href: language === 'en' ? '/en/services/manpower' : '/services/manpower'
     }
   ];
 
@@ -71,110 +75,284 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.classList.add('menu-open');
+    } else {
+      document.body.classList.remove('menu-open');
+    }
+    
+    return () => {
+      document.body.classList.remove('menu-open');
+    };
+  }, [isMenuOpen]);
+
   return (
-    <div 
-      onMouseLeave={() => {
-        setShowServicesMenu(false);
-        setShowAboutMenu(false);
-        setShowRealisationsMenu(false);
-        setShowEngagementsMenu(false);
-      }}
-    >
+    <div>
       <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 font-montserrat ${
         isScrolled || showServicesMenu || showAboutMenu || showRealisationsMenu || showEngagementsMenu
           ? 'bg-white shadow-md' 
           : 'bg-transparent'
       }`}>
-        <div className="w-full px-32 sm:px-40 lg:px-48 py-6">
-          <div className="flex items-center space-x-12">
+        <div className="w-full px-4 sm:px-6 md:px-8 lg:px-32 xl:px-40 2xl:px-48 py-4 lg:py-6">
+          <div className="flex items-center justify-between lg:space-x-12">
             
             {/* Logo */}
             <div className="flex items-center">
               <img 
                 src="/logo.png" 
                 alt="Derjani Group" 
-                className="h-20 w-auto"
+                className="h-12 sm:h-16 lg:h-20 w-auto"
               />
             </div>
 
             {/* Menu Items - alignés à gauche */}
             <div className="hidden lg:flex items-center space-x-8">
-              <a href="#" className={`hover:underline transition-all duration-200 ${
+              <Link href="/" className={`hover:underline transition-all duration-200 ${
                 isScrolled || showServicesMenu || showAboutMenu || showRealisationsMenu || showEngagementsMenu ? 'text-gray-700 hover:text-bordeaux-500' : 'text-white'
               }`}>
                 {t('nav.home')}
-              </a>
+              </Link>
               
-              {/* Services with mega menu */}
+              {/* Services with dropdown */}
               <div 
                 className="relative"
-                onMouseEnter={() => {
-                  setShowServicesMenu(true);
-                  setShowAboutMenu(false);
-                  setShowRealisationsMenu(false);
-                  setShowEngagementsMenu(false);
-                }}
+                onMouseEnter={() => setShowServicesMenu(true)}
+                onMouseLeave={() => setShowServicesMenu(false)}
               >
-                <a href="#" className={`hover:underline transition-all duration-200 ${
+                <span className={`hover:underline transition-all duration-200 cursor-pointer ${
                   isScrolled || showServicesMenu || showAboutMenu || showRealisationsMenu || showEngagementsMenu  ? 'text-gray-700 hover:text-bordeaux-500' : 'text-white'
                 }`}>
                   {t('nav.services')}
-                </a>
+                </span>
+                
+                {/* Services Dropdown */}
+                {showServicesMenu && (
+                  <div className="absolute top-full left-0 pt-2 w-64 z-50">
+                    <div className="bg-white rounded-md shadow-lg border border-gray-200">
+                    <div className="py-2">
+                      {services.map((service) => (
+                        <Link
+                          key={service.id}
+                          href={service.href}
+                          className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-bordeaux-600 transition-colors group"
+                          onClick={() => setShowServicesMenu(false)}
+                        >
+                          <span>{service.name}</span>
+                          <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </Link>
+                      ))}
+                      <div className="border-t border-gray-100 mt-2 pt-2">
+                        <Link
+                          href={language === 'en' ? '/en/services' : '/services'}
+                          className="flex items-center justify-between px-4 py-2 text-sm text-bordeaux-600 font-medium hover:bg-bordeaux-50 transition-colors group"
+                          onClick={() => setShowServicesMenu(false)}
+                        >
+                          <span>Voir tous nos services</span>
+                          <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </Link>
+                      </div>
+                    </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* À propos with mega menu */}
+              {/* À propos with dropdown */}
               <div 
                 className="relative"
-                onMouseEnter={() => {
-                  setShowServicesMenu(false);
-                  setShowAboutMenu(true);
-                  setShowRealisationsMenu(false);
-                  setShowEngagementsMenu(false);
-                }}
+                onMouseEnter={() => setShowAboutMenu(true)}
+                onMouseLeave={() => setShowAboutMenu(false)}
               >
-                <a href="#" className={`hover:underline transition-all duration-200 ${
+                <span className={`hover:underline transition-all duration-200 cursor-pointer ${
                   isScrolled || showServicesMenu || showAboutMenu || showRealisationsMenu || showEngagementsMenu  ? 'text-gray-700 hover:text-bordeaux-500' : 'text-white'
                 }`}>
                   {t('nav.about.submenu')}
-                </a>
+                </span>
+
+                {/* About Dropdown */}
+                {showAboutMenu && (
+                  <div className="absolute top-full left-0 pt-2 w-48 z-50">
+                    <div className="bg-white rounded-md shadow-lg border border-gray-200">
+                    <div className="py-2">
+                      <Link
+                        href={language === 'en' ? '/en/about' : '/about'}
+                        className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-bordeaux-600 transition-colors group"
+                        onClick={() => setShowAboutMenu(false)}
+                      >
+                        <span>Qui sommes-nous</span>
+                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                      <Link
+                        href={language === 'en' ? '/en/about/team' : '/about/team'}
+                        className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-bordeaux-600 transition-colors group"
+                        onClick={() => setShowAboutMenu(false)}
+                      >
+                        <span>Notre équipe</span>
+                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                      <Link
+                        href={language === 'en' ? '/en/about/values' : '/about/values'}
+                        className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-bordeaux-600 transition-colors group"
+                        onClick={() => setShowAboutMenu(false)}
+                      >
+                        <span>Nos valeurs</span>
+                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                      <Link
+                        href={language === 'en' ? '/en/about/history' : '/about/history'}
+                        className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-bordeaux-600 transition-colors group"
+                        onClick={() => setShowAboutMenu(false)}
+                      >
+                        <span>Notre histoire</span>
+                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Réalisations with mega menu */}
+              {/* Réalisations with dropdown */}
               <div 
                 className="relative"
-                onMouseEnter={() => {
-                  setShowServicesMenu(false);
-                  setShowAboutMenu(false);
-                  setShowRealisationsMenu(true);
-                  setShowEngagementsMenu(false);
-                }}
+                onMouseEnter={() => setShowRealisationsMenu(true)}
+                onMouseLeave={() => setShowRealisationsMenu(false)}
               >
-                <a href="#" className={`hover:underline transition-all duration-200 ${
+                <span className={`hover:underline transition-all duration-200 cursor-pointer ${
                   isScrolled || showServicesMenu || showAboutMenu || showRealisationsMenu || showEngagementsMenu  ? 'text-gray-700 hover:text-bordeaux-500' : 'text-white'
                 }`}>
                   {t('nav.realizations.submenu')}
-                </a>
+                </span>
+
+                {/* Realizations Dropdown */}
+                {showRealisationsMenu && (
+                  <div className="absolute top-full left-0 pt-2 w-48 z-50">
+                    <div className="bg-white rounded-md shadow-lg border border-gray-200">
+                    <div className="py-2">
+                      <Link
+                        href={language === 'en' ? '/en/realisations' : '/realisations'}
+                        className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-bordeaux-600 transition-colors group"
+                        onClick={() => setShowRealisationsMenu(false)}
+                      >
+                        <span>Toutes nos réalisations</span>
+                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                      <Link
+                        href={language === 'en' ? '/en/realisations/construction' : '/realisations/construction'}
+                        className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-bordeaux-600 transition-colors group"
+                        onClick={() => setShowRealisationsMenu(false)}
+                      >
+                        <span>Construction</span>
+                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                      <Link
+                        href={language === 'en' ? '/en/realisations/energie' : '/realisations/energie'}
+                        className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-bordeaux-600 transition-colors group"
+                        onClick={() => setShowRealisationsMenu(false)}
+                      >
+                        <span>Énergie</span>
+                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                      <Link
+                        href={language === 'en' ? '/en/realisations/securite' : '/realisations/securite'}
+                        className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-bordeaux-600 transition-colors group"
+                        onClick={() => setShowRealisationsMenu(false)}
+                      >
+                        <span>Sécurité</span>
+                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    </div>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Engagements with mega menu */}
+              {/* Engagements with dropdown */}
               <div 
                 className="relative"
-                onMouseEnter={() => {
-                  setShowServicesMenu(false);
-                  setShowAboutMenu(false);
-                  setShowRealisationsMenu(false);
-                  setShowEngagementsMenu(true);
-                }}
+                onMouseEnter={() => setShowEngagementsMenu(true)}
+                onMouseLeave={() => setShowEngagementsMenu(false)}
               >
-                <a href="#" className={`hover:underline transition-all duration-200 ${
+                <span className={`hover:underline transition-all duration-200 cursor-pointer ${
                   isScrolled || showServicesMenu || showAboutMenu || showRealisationsMenu || showEngagementsMenu  ? 'text-gray-700 hover:text-bordeaux-500' : 'text-white'
                 }`}>
                   {t('nav.commitments.submenu')}
-                </a>
+                </span>
+
+                {/* Engagements Dropdown */}
+                {showEngagementsMenu && (
+                  <div className="absolute top-full left-0 pt-2 w-48 z-50">
+                    <div className="bg-white rounded-md shadow-lg border border-gray-200">
+                    <div className="py-2">
+                      <Link
+                        href={language === 'en' ? '/en/engagements' : '/engagements'}
+                        className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-bordeaux-600 transition-colors group"
+                        onClick={() => setShowEngagementsMenu(false)}
+                      >
+                        <span>Nos engagements</span>
+                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                      <Link
+                        href={language === 'en' ? '/en/engagements/environnement' : '/engagements/environnement'}
+                        className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-bordeaux-600 transition-colors group"
+                        onClick={() => setShowEngagementsMenu(false)}
+                      >
+                        <span>Environnement</span>
+                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                      <Link
+                        href={language === 'en' ? '/en/engagements/social' : '/engagements/social'}
+                        className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-bordeaux-600 transition-colors group"
+                        onClick={() => setShowEngagementsMenu(false)}
+                      >
+                        <span>Social</span>
+                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                      <Link
+                        href={language === 'en' ? '/en/engagements/qualite' : '/engagements/qualite'}
+                        className="flex items-center justify-between px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-bordeaux-600 transition-colors group"
+                        onClick={() => setShowEngagementsMenu(false)}
+                      >
+                        <span>Qualité</span>
+                        <svg className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </Link>
+                    </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Contact à droite */}
+            {/* Contact à droite - Desktop */}
             <div className="hidden lg:flex items-center ml-auto space-x-4">
               <LanguageToggle />
               <button
@@ -192,314 +370,196 @@ const Navigation = () => {
               </a>
             </div>
 
+            {/* Mobile menu button */}
+            <div className="lg:hidden flex items-center space-x-2">
+              <LanguageToggle />
+              <div 
+                className={`hamburger ${isMenuOpen ? 'open' : ''}`}
+                onClick={() => {
+                  setIsMenuOpen(!isMenuOpen);
+                  if (!isMenuOpen) setMobileView('main');
+                }}
+              >
+                <span className={isScrolled ? 'bg-bordeaux-600' : 'bg-white'}></span>
+                <span className={isScrolled ? 'bg-bordeaux-600' : 'bg-white'}></span>
+                <span className={isScrolled ? 'bg-bordeaux-600' : 'bg-white'}></span>
+              </div>
+            </div>
+
           </div>
         </div>
       </nav>
 
-      {/* Mega Menu positioned relative to viewport */}
-      {showServicesMenu && (
-        <div 
-          className="fixed top-[74px] left-0 w-full bg-white shadow-xl border-t border-gray-100 z-40"
-        >
-          <div className="flex w-full px-32 sm:px-40 lg:px-48">
+      {/* Menu Mobile Overlay */}
+      <div className={`menu-overlay bg-white ${isMenuOpen ? 'open' : ''}`} style={{ backgroundColor: 'white' }}>
+        {isMenuOpen && <div className="menu-sweep"></div>}
+        
+        {/* Bouton X pour fermer */}
+        <div className="absolute top-6 right-6 z-50">
+          <div 
+            className="cursor-pointer"
+            onClick={() => {
+              setIsMenuOpen(false);
+              setMobileView('main');
+            }}
+          >
+            <svg
+              className="h-8 w-8 text-bordeaux-600 transition-transform hover:scale-110 hover:rotate-90 duration-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
+        </div>
+        
+        {/* Vue principale du menu */}
+        <div className={`absolute inset-0 transition-transform duration-300 ${mobileView === 'main' ? 'translate-x-0' : '-translate-x-full'}`}>
+          <div className="flex flex-col h-full">
+            {/* En-tête avec logo */}
+            <div className="flex-shrink-0 px-8 pt-20 pb-8 text-left">
+              <img
+                src="/logo.png"
+                alt="Derjani Group Logo"
+                className="h-32 w-auto"
+              />
+            </div>
             
-            {/* Sidebar gauche */}
-            <div className="w-80 py-16 px-6 border-r border-gray-100">
-              <div className="space-y-1">
-                {services.map((service, index) => (
-                  <div key={service.id}>
-                    <div
-                      onMouseEnter={() => setActiveService(service.id)}
-                      className={`flex items-center px-4 py-4 rounded-lg cursor-pointer transition-all duration-200 ${
-                        activeService === service.id 
-                          ? 'bg-bordeaux-50 shadow-md border border-bordeaux-200' 
-                          : 'hover:bg-gray-50 hover:shadow-sm'
-                      }`}
-                    >
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center mr-4 transition-colors ${
-                        activeService === service.id ? 'bg-bordeaux-500' : 'bg-gray-200'
-                      }`}>
-                        <span className={`text-xl ${activeService === service.id ? 'text-white' : 'text-gray-600'}`}>
-                          {service.id === 'construction' && '🏗️'}
-                          {service.id === 'energie' && '⚡'}
-                          {service.id === 'securite' && '🔒'}
-                          {service.id === 'fourniture' && '🚛'}
-                          {service.id === 'services-tech' && '🔧'}
-                          {service.id === 'rh' && '👥'}
-                        </span>
-                      </div>
-                      <div>
-                        <span className={`font-semibold text-sm block ${
-                          activeService === service.id ? 'text-bordeaux-700' : 'text-gray-800'
-                        }`}>
-                          {service.name}
-                        </span>
-                        <span className="text-xs text-gray-500 mt-1 block">
-                          {service.id === 'construction' && 'Infrastructure & Bâtiment'}
-                          {service.id === 'energie' && 'Générateurs & Centrales'}
-                          {service.id === 'securite' && 'Protection & Surveillance'}
-                          {service.id === 'fourniture' && 'Équipements & Véhicules'}
-                          {service.id === 'services-tech' && 'Services techniques'}
-                          {service.id === 'rh' && 'Personnel qualifié'}
-                        </span>
-                      </div>
+            {/* Navigation */}
+            <div className="flex-1 px-8">
+              <nav className="space-y-6">
+                <Link
+                  href="/"
+                  className="block text-2xl font-bold text-gray-800 hover:text-bordeaux-600 transition-colors duration-300 py-2"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setMobileView('main');
+                  }}
+                >
+                  {t('nav.home')}
+                </Link>
+                
+                <button
+                  className="flex items-center justify-between w-full text-2xl font-bold text-gray-800 hover:text-bordeaux-600 transition-colors duration-300 py-2"
+                  onClick={() => setMobileView('services')}
+                >
+                  <span>{t('nav.services')}</span>
+                  <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+                
+                <button
+                  className="block text-2xl font-bold text-gray-800 hover:text-bordeaux-600 transition-colors duration-300 py-2 text-left w-full"
+                  onClick={() => {
+                    // Scroll vers la section about ou navigation
+                    if (pathname === '/') {
+                      document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      router.push('/#about');
+                    }
+                    setIsMenuOpen(false);
+                    setMobileView('main');
+                  }}
+                >
+                  {t('nav.about.submenu')}
+                </button>
+                
+                <button
+                  className="block text-2xl font-bold text-gray-800 hover:text-bordeaux-600 transition-colors duration-300 py-2 text-left w-full"
+                  onClick={() => {
+                    // Scroll vers la section realizations ou navigation  
+                    if (pathname === '/') {
+                      document.getElementById('realizations')?.scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                      router.push('/#realizations');
+                    }
+                    setIsMenuOpen(false);
+                    setMobileView('main');
+                  }}
+                >
+                  {t('nav.realizations.submenu')}
+                </button>
+              </nav>
+            </div>
+            
+            {/* CTA en bas */}
+            <div className="flex-shrink-0 px-8 pb-8 space-y-4">
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  openContactModal();
+                }}
+                className="w-full bg-bordeaux-500 text-white text-lg font-semibold py-4 rounded-xl hover:bg-bordeaux-600 transition-colors duration-300"
+              >
+                {t('nav.contact')}
+              </button>
+              <a 
+                href={`tel:${t('nav.phone')}`}
+                className="block w-full text-center border-2 border-bordeaux-500 text-bordeaux-500 text-lg font-semibold py-4 rounded-xl hover:bg-bordeaux-50 transition-colors duration-300"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {t('nav.phone')}
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        {/* Vue services avec fil d'Ariane */}
+        <div className={`absolute inset-0 transition-transform duration-300 ${mobileView === 'services' ? 'translate-x-0' : 'translate-x-full'}`}>
+          <div className="flex flex-col h-full">
+            {/* En-tête avec navigation retour */}
+            <div className="flex-shrink-0 px-8 pt-20 pb-8 text-left">
+              <div className="flex items-center mb-6">
+                <button
+                  onClick={() => setMobileView('main')}
+                  className="flex items-center text-bordeaux-600 hover:text-bordeaux-700 transition-colors mr-4"
+                >
+                  <svg className="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Retour
+                </button>
+                <div className="text-sm text-gray-500">
+                  Menu &gt; Services
+                </div>
+              </div>
+              <h2 className="text-3xl font-bold text-gray-800 mb-2">Nos Services</h2>
+              <p className="text-gray-600">Découvrez notre expertise dans 6 domaines clés</p>
+            </div>
+            
+            {/* Liste des services */}
+            <div className="flex-1 px-8 pb-8">
+              <div className="space-y-4">
+                {services.map((service) => (
+                  <Link
+                    key={service.id}
+                    href={service.href}
+                    className="flex items-center p-4 bg-white border border-gray-200 rounded-xl hover:border-bordeaux-500 hover:shadow-md transition-all duration-300 group"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      setMobileView('main');
+                    }}
+                  >
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-gray-800 group-hover:text-bordeaux-600 transition-colors">
+                        {service.name}
+                      </h3>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {service.description.substring(0, 60)}...
+                      </p>
                     </div>
-                    {index < services.length - 1 && (
-                      <div className="h-px bg-gray-100 mx-4 my-2"></div>
-                    )}
-                  </div>
+                    <svg className="h-5 w-5 text-gray-400 group-hover:text-bordeaux-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </Link>
                 ))}
               </div>
             </div>
-
-            {/* Contenu principal */}
-            <div className="flex-1 py-16 px-8">
-              <div className="flex h-full">
-                
-                {/* Description du service */}
-                <div className="flex-1 pr-6 py-15 pl-6">
-                  <div className="mb-2">
-                    <H4 className="text-bordeaux-600 mb-1">
-                      {services.find(s => s.id === activeService)?.name}
-                    </H4>
-                    <div className="text-xs text-bordeaux-400 font-medium mb-4">
-                      Voir tout →
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-3 mb-6">
-                    {activeService === 'construction' && (
-                      <>
-                        <div className="text-sm text-gray-700 font-medium">Camps militaires et civils</div>
-                        <div className="text-sm text-gray-700 font-medium">Infrastructures industrielles</div>
-                        <div className="text-sm text-gray-700 font-medium">Bâtiments préfabriqués</div>
-                        <div className="text-sm text-gray-700 font-medium">Routes et ponts</div>
-                      </>
-                    )}
-                    {activeService === 'energie' && (
-                      <>
-                        <div className="text-sm text-gray-700 font-medium">Générateurs de toutes puissances</div>
-                        <div className="text-sm text-gray-700 font-medium">Systèmes automatiques</div>
-                        <div className="text-sm text-gray-700 font-medium">Maintenance préventive</div>
-                        <div className="text-sm text-gray-700 font-medium">Panneaux de contrôle</div>
-                      </>
-                    )}
-                    {activeService === 'securite' && (
-                      <>
-                        <div className="text-sm text-gray-700 font-medium">Systèmes périmètriques</div>
-                        <div className="text-sm text-gray-700 font-medium">Surveillance électronique</div>
-                        <div className="text-sm text-gray-700 font-medium">Protection balistique</div>
-                        <div className="text-sm text-gray-700 font-medium">Véhicules blindés</div>
-                      </>
-                    )}
-                    {activeService === 'fourniture' && (
-                      <>
-                        <div className="text-sm text-gray-700 font-medium">Équipements lourds</div>
-                        <div className="text-sm text-gray-700 font-medium">Véhicules spécialisés</div>
-                        <div className="text-sm text-gray-700 font-medium">Fournitures médicales</div>
-                        <div className="text-sm text-gray-700 font-medium">Mobilier professionnel</div>
-                      </>
-                    )}
-                    {activeService === 'services-tech' && (
-                      <>
-                        <div className="text-sm text-gray-700 font-medium">Restauration collective</div>
-                        <div className="text-sm text-gray-700 font-medium">Gestion des installations</div>
-                        <div className="text-sm text-gray-700 font-medium">Services informatiques</div>
-                        <div className="text-sm text-gray-700 font-medium">Aménagement paysager</div>
-                      </>
-                    )}
-                    {activeService === 'rh' && (
-                      <>
-                        <div className="text-sm text-gray-700 font-medium">Personnel technique qualifié</div>
-                        <div className="text-sm text-gray-700 font-medium">Expertise internationale</div>
-                        <div className="text-sm text-gray-700 font-medium">Formation spécialisée</div>
-                        <div className="text-sm text-gray-700 font-medium">Consultants experts</div>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                {/* Image à droite */}
-                <div className="w-96 py-10">
-                  <div className="w-full h-full rounded-lg overflow-hidden shadow-lg relative">
-                    <img 
-                      src={services.find(s => s.id === activeService)?.image} 
-                      alt={services.find(s => s.id === activeService)?.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='384' height='256' viewBox='0 0 384 256'%3E%3Crect width='384' height='256' fill='%236b0e0e'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial, sans-serif' font-size='16' fill='white'%3EImage à venir%3C/text%3E%3C/svg%3E";
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                    <div className="absolute bottom-6 left-6 text-white">
-                      <span className="text-lg font-semibold">
-                        {services.find(s => s.id === activeService)?.name}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
           </div>
         </div>
-      )}
-
-      {/* À propos Mega Menu */}
-      {showAboutMenu && (
-        <div className="fixed top-[74px] left-0 w-full bg-white shadow-lg border-t border-gray-200 z-40">
-          <div className="flex w-full px-32 sm:px-40 lg:px-48">
-            <div className="w-1/3 py-8 px-8">
-              <H4 className="text-bordeaux-500 mb-4">Notre Histoire</H4>
-              <Paragraph className="text-gray-600 mb-4">
-                Fondé à Beyrouth en 1988, Derjani Group s'est imposé comme un acteur de référence dans les secteurs du BTP, de la fourniture et des services.
-              </Paragraph>
-              <div className="space-y-2">
-                <div className="text-sm text-gray-500">• 35+ années d'expérience</div>
-                <div className="text-sm text-gray-500">• Présence internationale</div>
-                <div className="text-sm text-gray-500">• Expertise multisectorielle</div>
-              </div>
-            </div>
-            <div className="w-1/3 py-8 px-8">
-              <H4 className="text-bordeaux-500 mb-4">Vision & Mission</H4>
-              <div className="space-y-4">
-                <div>
-                  <H5 className="text-gray-700 mb-2">Vision</H5>
-                  <Paragraph className="text-gray-600 text-sm">
-                    Être leader mondial dans la gestion de projets, la construction, la génération d'énergie, la sécurité et les services.
-                  </Paragraph>
-                </div>
-                <div>
-                  <H5 className="text-gray-700 mb-2">Mission</H5>
-                  <Paragraph className="text-gray-600 text-sm">
-                    Offrir des solutions innovantes répondant aux besoins spécifiques de chaque client.
-                  </Paragraph>
-                </div>
-              </div>
-            </div>
-            <div className="w-1/3 py-8 px-8">
-              <H4 className="text-bordeaux-500 mb-4">Nos Valeurs</H4>
-              <div className="space-y-3">
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-bordeaux-500 rounded-full mr-3"></div>
-                  <span className="text-gray-700">Intégrité</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-bordeaux-500 rounded-full mr-3"></div>
-                  <span className="text-gray-700">Honnêteté</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-bordeaux-500 rounded-full mr-3"></div>
-                  <span className="text-gray-700">Fiabilité</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-bordeaux-500 rounded-full mr-3"></div>
-                  <span className="text-gray-700">Responsabilité</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-2 h-2 bg-bordeaux-500 rounded-full mr-3"></div>
-                  <span className="text-gray-700">Esprit d'équipe</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Réalisations Mega Menu */}
-      {showRealisationsMenu && (
-        <div className="fixed top-[74px] left-0 w-full bg-white shadow-lg border-t border-gray-200 z-40">
-          <div className="flex w-full px-32 sm:px-40 lg:px-48">
-            <div className="w-1/3 py-8 px-8">
-              <H4 className="text-bordeaux-500 mb-4">Clients Prestigieux</H4>
-              <div className="space-y-3">
-                <div className="text-sm text-gray-700">🇺🇸 Forces armées des États-Unis</div>
-                <div className="text-sm text-gray-700">🇺🇳 Nations Unies (UNIFIL, UN Soudan)</div>
-                <div className="text-sm text-gray-700">🇫🇷 Forces françaises</div>
-                <div className="text-sm text-gray-700">🇮🇹 Forces italiennes</div>
-                <div className="text-sm text-gray-700">🇶🇦 Forces qataries</div>
-                <div className="text-sm text-gray-700">🇪🇸 Forces espagnoles</div>
-                <div className="text-sm text-gray-700">🇹🇷 Forces turques</div>
-                <div className="text-sm text-gray-700">🌍 ISAF Afghanistan (OTAN)</div>
-              </div>
-            </div>
-            <div className="w-1/3 py-8 px-8">
-              <H4 className="text-bordeaux-500 mb-4">Secteurs d'Activité</H4>
-              <div className="space-y-4">
-                <div>
-                  <H5 className="text-gray-700 mb-2">Militaire & Défense</H5>
-                  <Paragraph className="text-gray-600 text-sm">
-                    Infrastructures militaires, camps, systèmes de sécurité pour forces armées internationales.
-                  </Paragraph>
-                </div>
-                <div>
-                  <H5 className="text-gray-700 mb-2">Pétrole & Gaz</H5>
-                  <Paragraph className="text-gray-600 text-sm">
-                    Projets industriels au Liban, Irak et Nigeria pour le secteur énergétique.
-                  </Paragraph>
-                </div>
-              </div>
-            </div>
-            <div className="w-1/3 py-8 px-8">
-              <H4 className="text-bordeaux-500 mb-4">Présence Mondiale</H4>
-              <div className="grid grid-cols-2 gap-2">
-                <div className="text-sm text-gray-700">🇱🇧 Liban</div>
-                <div className="text-sm text-gray-700">🇦🇪 Abu Dhabi</div>
-                <div className="text-sm text-gray-700">🇦🇪 Dubaï</div>
-                <div className="text-sm text-gray-700">🇮🇶 Irak</div>
-                <div className="text-sm text-gray-700">🇦🇫 Afghanistan</div>
-                <div className="text-sm text-gray-700">🇹🇳 Tunisie</div>
-                <div className="text-sm text-gray-700">🇰🇼 Koweït</div>
-                <div className="text-sm text-gray-700">🇸🇸 Soudan du Sud</div>
-                <div className="text-sm text-gray-700">🇳🇬 Nigeria</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Engagements Mega Menu */}
-      {showEngagementsMenu && (
-        <div className="fixed top-[74px] left-0 w-full bg-white shadow-lg border-t border-gray-200 z-40">
-          <div className="flex w-full px-32 sm:px-40 lg:px-48">
-            <div className="w-1/3 py-8 px-8">
-              <H4 className="text-bordeaux-500 mb-4">Qualité</H4>
-              <Paragraph className="text-gray-600 mb-4">
-                Processus stricts de contrôle, partenaires fiables, écoute active des besoins clients.
-              </Paragraph>
-              <div className="space-y-2">
-                <div className="text-sm text-gray-500">• Système qualité ISO</div>
-                <div className="text-sm text-gray-500">• Contrôle continu</div>
-                <div className="text-sm text-gray-500">• Satisfaction client</div>
-              </div>
-            </div>
-            <div className="w-1/3 py-8 px-8">
-              <H4 className="text-bordeaux-500 mb-4">Sécurité HSE</H4>
-              <Paragraph className="text-gray-600 mb-4">
-                Politique HSE stricte, formation continue du personnel, conformité aux réglementations internationales.
-              </Paragraph>
-              <div className="space-y-2">
-                <div className="text-sm text-gray-500">• Formation sécurité obligatoire</div>
-                <div className="text-sm text-gray-500">• Équipements de protection</div>
-                <div className="text-sm text-gray-500">• Normes internationales</div>
-              </div>
-            </div>
-            <div className="w-1/3 py-8 px-8">
-              <H4 className="text-bordeaux-500 mb-4">Responsabilité Sociétale</H4>
-              <Paragraph className="text-gray-600 mb-4">
-                Soutien à des événements locaux, programmes de formation et stages pour étudiants.
-              </Paragraph>
-              <div className="space-y-2">
-                <div className="text-sm text-gray-500">• Programmes de formation</div>
-                <div className="text-sm text-gray-500">• Stages étudiants</div>
-                <div className="text-sm text-gray-500">• Événements communautaires</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      </div>
 
     </div>
   );

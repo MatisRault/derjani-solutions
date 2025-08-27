@@ -34,26 +34,27 @@ const Hero = () => {
 
       {/* Hero Content */}
       <div className="relative z-30 h-full flex items-center">
-        <div className="px-32 sm:px-40 lg:px-48 w-full">
-          <div className="max-w-2xl text-white">
+        <div className="px-4 sm:px-6 md:px-8 lg:px-32 xl:px-40 2xl:px-48 w-full">
+          <div className="max-w-4xl text-white">
           <H1 className="mb-6 text-white drop-shadow-2xl">
             Derjani Group
           </H1>
           
-          <p className="text-lg md:text-xl font-light leading-relaxed mb-10 drop-shadow-lg">
+          <p className="text-base sm:text-lg md:text-xl font-light leading-relaxed mb-8 lg:mb-10 drop-shadow-lg max-w-3xl">
             Depuis 1988, votre partenaire de confiance pour des solutions d'excellence. 
             Construction, énergie, sécurité - nous réalisons vos projets avec expertise et fiabilité.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <Button variant="primary" size="lg" className="drop-shadow-lg">
               Nous contacter
             </Button>
-            <a href="tel:+33123456789" className="inline-flex items-center gap-2 px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-bordeaux-500 transition-colors drop-shadow-lg">
+            <a href="tel:+33123456789" className="inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-bordeaux-500 transition-colors drop-shadow-lg">
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
               </svg>
-              +33 1 23 45 67 89
+              <span className="hidden sm:inline">+33 1 23 45 67 89</span>
+              <span className="sm:hidden">Appeler</span>
             </a>
           </div>
           </div>

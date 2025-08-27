@@ -48,28 +48,28 @@ const FAQSection = () => {
   };
 
   return (
-    <section className="w-full bg-gray-50 py-16">
-      <div className="px-32 sm:px-40 lg:px-48">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <section className="w-full bg-gray-50 py-16 lg:py-20">
+      <div className="px-4 sm:px-6 md:px-8 lg:px-32 xl:px-40 2xl:px-48">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-start">
           
           {/* Contenu à gauche */}
-          <div className="space-y-6">
-            <h2 className="text-4xl font-bold text-bordeaux-600">
+          <div className="space-y-6 lg:sticky lg:top-8">
+            <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-800 leading-tight">
               {t('faq.title')}
             </h2>
             
-            <p className="text-lg text-gray-700 leading-relaxed">
+            <p className="text-base lg:text-lg text-gray-700 leading-relaxed">
               {t('faq.subtitle')}
             </p>
 
             <div className="pt-4">
               <button 
                 onClick={openContactModal}
-                className="bg-bordeaux-500 hover:bg-bordeaux-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-300 flex items-center gap-2"
+                className="inline-flex items-center gap-3 bg-bordeaux-500 hover:bg-bordeaux-600 text-white font-semibold px-6 lg:px-8 py-3 lg:py-4 rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl"
               >
-{t('faq.cta')}
+                <span className="text-sm lg:text-base">{t('faq.cta')}</span>
                 <svg 
-                  className="w-5 h-5" 
+                  className="w-4 h-4 lg:w-5 lg:h-5 transition-transform group-hover:translate-x-1" 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -86,22 +86,26 @@ const FAQSection = () => {
           </div>
 
           {/* FAQ Accordions à droite */}
-          <div className="space-y-0">
-            {faqData.map((item) => (
-              <div key={item.id} className="border-t border-b border-gray-200">
+          <div className="space-y-2">
+            {faqData.map((item, index) => (
+              <div key={item.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <button
                   onClick={() => toggleItem(item.id)}
-                  className="w-full py-6 text-left flex items-center justify-between"
+                  className="w-full p-6 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200"
                 >
-                  <span className="font-semibold text-gray-800 pr-4">
+                  <span className="font-semibold text-gray-800 pr-4 text-sm lg:text-base">
                     {t(item.questionKey)}
                   </span>
                   <div 
-                    className="w-8 h-8 bg-bordeaux-500 rounded flex items-center justify-center flex-shrink-0"
+                    className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
+                      openItem === item.id 
+                        ? 'bg-bordeaux-500 text-white' 
+                        : 'bg-gray-200 text-gray-600 hover:bg-bordeaux-100 hover:text-bordeaux-600'
+                    }`}
                   >
                     <svg 
-                      className={`w-5 h-5 text-white transition-transform duration-200 ${
-                        openItem === item.id ? 'transform rotate-45' : ''
+                      className={`w-4 h-4 transition-transform duration-300 ${
+                        openItem === item.id ? 'rotate-45' : ''
                       }`}
                       fill="none" 
                       stroke="currentColor" 
@@ -119,10 +123,10 @@ const FAQSection = () => {
                 
                 <div 
                   className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    openItem === item.id ? 'max-h-96 pb-6' : 'max-h-0'
+                    openItem === item.id ? 'max-h-96' : 'max-h-0'
                   }`}
                 >
-                  <div className="text-gray-700 leading-relaxed">
+                  <div className="px-6 pb-6 text-gray-700 leading-relaxed text-sm lg:text-base">
                     {t(item.answerKey)}
                   </div>
                 </div>

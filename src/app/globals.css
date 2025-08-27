@@ -6,8 +6,20 @@
   .bg-bordeaux-100 { background-color: #fce8e8; }
   .bg-bordeaux-300 { background-color: #f59c9c; }
   .bg-bordeaux-500 { background-color: #6b0e0e; }
+  .bg-bordeaux-600 { background-color: #5a0c0c; }
   .bg-bordeaux-700 { background-color: #4a0a0a; }
   .bg-bordeaux-900 { background-color: #2a0606; }
+  .text-bordeaux-500 { color: #6b0e0e; }
+  .text-bordeaux-600 { color: #5a0c0c; }
+  .text-bordeaux-700 { color: #4a0a0a; }
+  .border-bordeaux-500 { border-color: #6b0e0e; }
+  .border-bordeaux-600 { border-color: #5a0c0c; }
+  .hover\:bg-bordeaux-600:hover { background-color: #5a0c0c; }
+  .hover\:bg-bordeaux-50:hover { background-color: #fef2f2; }
+  .hover\:text-bordeaux-500:hover { color: #6b0e0e; }
+  .hover\:text-bordeaux-600:hover { color: #5a0c0c; }
+  .hover\:text-bordeaux-700:hover { color: #4a0a0a; }
+  .hover\:border-bordeaux-500:hover { border-color: #6b0e0e; }
 }
 
 :root {
@@ -51,4 +63,243 @@ body {
 .swiper-pagination-bullet-active-custom {
   background: #6b0e0e;
   transform: scale(1.2);
+}
+
+/* Menu Mobile Overlay Styles - Based on your snippet */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: white !important;
+  background-color: white !important;
+  transform: translateY(-100%);
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 9999;
+}
+
+.menu-overlay.open {
+  transform: translateY(0);
+}
+
+.menu-sweep {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, transparent, rgba(107,14,14,0.1), transparent);
+  transform: translateY(-100%);
+  animation: sweep-down 0.8s ease-out 0.2s;
+}
+
+@keyframes sweep-down {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+
+/* Hamburger Menu Styles */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  gap: 4px;
+  padding: 8px;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  transition: all 0.3s ease;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Responsive mega menu improvements */
+@media (max-width: 1023px) {
+  .menu-overlay {
+    background: linear-gradient(135deg, #6b0e0e 0%, #4a0a0a 50%, #2a0606 100%);
+  }
+  
+  .menu-overlay .flex {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animation for infinite scroll */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 30s linear infinite;
+}
+
+/* Prevent menu body scroll when mobile menu is open */
+body.menu-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+/* Improve touch targets on mobile */
+@media (max-width: 768px) {
+  .menu-overlay a,
+  .menu-overlay button {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Add subtle animations for better UX */
+.menu-overlay a,
+.menu-overlay button {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.menu-overlay a:hover,
+.menu-overlay button:hover {
+  transform: translateY(-2px);
+}
+
+/* Line clamp utilities for service cards */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Custom marker styles for Leaflet */
+.custom-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Leaflet popup styles */
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.leaflet-popup-tip {
+  background: white;
+}
+
+/* Cacher le logo ukrainien et autres éléments indésirables de Leaflet */
+.leaflet-control-attribution {
+  display: none !important;
+}
+
+/* Alternative si on veut garder l'attribution mais virer juste le drapeau */
+.leaflet-control-attribution a[href*="ukraine"] {
+  display: none !important;
+}
+
+.leaflet-control-attribution img {
+  display: none !important;
+}
+
+/* Virer aussi le logo Leaflet si souhaité */
+.leaflet-control-attribution a[href*="leafletjs.com"] {
+  display: none !important;
+}
+
+/* Forcer les z-index Leaflet à rester en dessous de la navigation */
+.leaflet-container,
+.leaflet-pane,
+.leaflet-tile-pane,
+.leaflet-objects-pane,
+.leaflet-overlay-pane {
+  z-index: 1 !important;
+}
+
+.leaflet-control-container {
+  z-index: 10 !important;
+}
+
+/* S'assurer que la navigation reste au-dessus */
+nav[class*="z-50"] {
+  z-index: 9999 !important;
+}
+
+/* Améliorer la visibilité des placeholders dans les formulaires */
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+  color: #6b7280 !important; /* text-gray-500 */
+  opacity: 1 !important;
+}
+
+input:focus::placeholder,
+textarea:focus::placeholder,
+select:focus::placeholder {
+  color: #9ca3af !important; /* text-gray-400 plus clair au focus */
+  opacity: 0.8 !important;
+}
+
+/* Améliorer la visibilité du texte des selects et inputs */
+input,
+textarea,
+select {
+  color: #374151 !important; /* text-gray-700 plus foncé */
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  color: #1f2937 !important; /* text-gray-800 encore plus foncé au focus */
+}
+
+/* Style spécifique pour les options des selects */
+select option {
+  color: #374151 !important;
+  background-color: white !important;
+}
+
+/* Améliorer le contraste pour les selects avec valeur par défaut */
+select:invalid {
+  color: #6b7280 !important; /* Plus clair pour les options par défaut */
+}
+
+select:valid {
+  color: #374151 !important; /* Plus foncé quand une vraie option est sélectionnée */
 }

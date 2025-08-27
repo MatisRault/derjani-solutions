@@ -63,14 +63,14 @@ const ReassuranceBannerNew = () => {
 
   return (
     <section ref={sectionRef} className="w-full bg-bordeaux-500">
-      <div className="px-32 sm:px-40 lg:px-48 py-12">
-        <div className="grid grid-cols-4 gap-12 text-center">
+      <div className="px-4 sm:px-6 md:px-8 lg:px-32 xl:px-40 2xl:px-48 py-8 sm:py-12">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12 text-center">
           {targetCounts.map((_, index) => (
             <div key={index}>
-              <div className="text-4xl font-bold text-white mb-2">
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">
                 {Math.round(counts[index])}
               </div>
-              <div className="text-base text-white opacity-90 font-medium">
+              <div className="text-sm sm:text-base text-white opacity-90 font-medium">
                 {labels[index]}
               </div>
             </div>

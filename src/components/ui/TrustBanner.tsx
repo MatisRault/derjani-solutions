@@ -58,35 +58,38 @@ const TrustBanner = () => {
   const allClients = [...clients, ...clients, ...clients];
 
   return (
-    <section className="w-full bg-white py-16 overflow-hidden">
-      <div className="px-32 sm:px-40 lg:px-48">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-bordeaux-600 mb-4">
+    <section className="w-full bg-white py-16 lg:py-20 overflow-hidden">
+      <div className="px-4 sm:px-6 md:px-8 lg:px-32 xl:px-40 2xl:px-48">
+        <div className="text-center mb-12 lg:mb-16">
+          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-800 mb-4 leading-tight">
             {t('trust.title')}
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-base lg:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
             {t('trust.subtitle')}
           </p>
         </div>
 
         <div className="relative">
-          <div className="flex animate-scroll-left space-x-8">
+          {/* Gradient overlays for infinite scroll effect */}
+          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent z-10"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10"></div>
+          
+          <div className="flex animate-scroll-left space-x-6 lg:space-x-8">
             {allClients.map((client, index) => (
               <div
                 key={`${client.id}-${index}`}
-                className="flex-shrink-0 bg-white rounded-lg shadow-md p-6 border border-gray-200 w-48 h-32 flex items-center justify-center"
+                className="flex-shrink-0 bg-gray-50 hover:bg-white rounded-xl shadow-sm hover:shadow-md p-4 lg:p-6 border border-gray-100 w-36 sm:w-44 lg:w-48 h-24 lg:h-32 flex items-center justify-center transition-all duration-300 hover:scale-105"
               >
                 <img
                   src={client.logo}
                   alt={client.name}
-                  className="max-h-16 max-w-32 object-contain filter grayscale"
+                  className="max-h-12 lg:max-h-16 max-w-28 lg:max-w-32 object-contain filter grayscale hover:grayscale-0 transition-all duration-300"
                   onError={(e) => {
-                    // Fallback si l'image n'existe pas
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';
                     const parent = target.parentElement;
                     if (parent) {
-                      parent.innerHTML = `<div class="text-bordeaux-600 font-semibold text-center">${client.name}</div>`;
+                      parent.innerHTML = `<div class="text-bordeaux-600 font-semibold text-center text-xs lg:text-sm">${client.name}</div>`;
                     }
                   }}
                 />

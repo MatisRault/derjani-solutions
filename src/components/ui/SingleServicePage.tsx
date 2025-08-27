@@ -251,12 +251,6 @@ const RelatedServices = ({ currentService }: { currentService: string }) => {
 const SingleServicePage: React.FC<SingleServicePageProps> = ({ serviceData }) => {
   const { t } = useLanguage();
   
-  const breadcrumbs = [
-    { label: t('service.breadcrumb.home'), href: '/' },
-    { label: t('service.breadcrumb.services'), href: '/#services' },
-    { label: t(`service.${serviceData.key}.hero.title`) }
-  ];
-  
   return (
     <div className="min-h-screen bg-white">
       <Navigation />
@@ -265,7 +259,6 @@ const SingleServicePage: React.FC<SingleServicePageProps> = ({ serviceData }) =>
         title={t(`service.${serviceData.key}.hero.title`)}
         description={t(`service.${serviceData.key}.hero.subtitle`)}
         backgroundImage={serviceData.heroImage}
-        breadcrumbs={breadcrumbs}
       />
       
       <ServiceOverview serviceKey={serviceData.key} />

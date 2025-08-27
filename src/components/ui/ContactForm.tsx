@@ -68,58 +68,60 @@ const ContactForm = () => {
   };
 
   return (
-    <section className="w-full bg-white py-16">
-      <div className="px-32 sm:px-40 lg:px-48">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+    <section className="w-full bg-gray-50 py-16 lg:py-20">
+      <div className="px-4 sm:px-6 md:px-8 lg:px-32 xl:px-40 2xl:px-48">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-start">
           
           {/* Contenu à gauche */}
           <div className="space-y-6">
-            <h2 className="text-4xl font-bold text-bordeaux-600">
+            <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-800 leading-tight">
               {t('contact.title')}
             </h2>
             
-            <p className="text-lg text-gray-700 leading-relaxed">
-              {t('contact.text1')}
-            </p>
-            
-            <p className="text-lg text-gray-700 leading-relaxed">
-              {t('contact.text2')}
-            </p>
+            <div className="space-y-4">
+              <p className="text-base lg:text-lg text-gray-700 leading-relaxed">
+                {t('contact.text1')}
+              </p>
+              
+              <p className="text-base lg:text-lg text-gray-700 leading-relaxed">
+                {t('contact.text2')}
+              </p>
+            </div>
 
-            <div className="space-y-4 pt-4">
-              <div className="flex items-center gap-3">
-                <div className="w-5 h-5 bg-bordeaux-500 rounded-full flex items-center justify-center">
-                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <div className="space-y-4 pt-6">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-bordeaux-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
                     <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
                   </svg>
                 </div>
-                <span className="text-gray-600">{t('contact.email')}</span>
+                <span className="text-gray-700 font-medium">{t('contact.email')}</span>
               </div>
               
-              <div className="flex items-center gap-3">
-                <div className="w-5 h-5 bg-bordeaux-500 rounded-full flex items-center justify-center">
-                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-bordeaux-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
                   </svg>
                 </div>
-                <span className="text-gray-600">{t('contact.location')}</span>
+                <span className="text-gray-700 font-medium">{t('contact.location')}</span>
               </div>
               
-              <div className="flex items-center gap-3">
-                <div className="w-5 h-5 bg-bordeaux-500 rounded-full flex items-center justify-center">
-                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-bordeaux-500 rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
                 </div>
-                <span className="text-gray-600">{t('contact.guarantee')}</span>
+                <span className="text-gray-700 font-medium">{t('contact.guarantee')}</span>
               </div>
             </div>
           </div>
 
           {/* Formulaire à droite */}
-          <div className="bg-gray-50 rounded-lg p-8">
-            <h3 className="text-2xl font-bold text-gray-800 mb-6">{t('contact.form.title')}</h3>
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 lg:p-8">
+            <h3 className="text-xl lg:text-2xl font-bold text-gray-800 mb-6">{t('contact.form.title')}</h3>
             
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -134,7 +136,7 @@ const ContactForm = () => {
                     required
                     value={formData.company}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                     placeholder={t('contact.form.companyPlaceholder')}
                   />
                 </div>
@@ -150,7 +152,7 @@ const ContactForm = () => {
                     required
                     value={formData.contactName}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                     placeholder={t('contact.form.contactNamePlaceholder')}
                   />
                 </div>
@@ -168,7 +170,7 @@ const ContactForm = () => {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                     placeholder={t('contact.form.emailPlaceholder')}
                   />
                 </div>
@@ -183,7 +185,7 @@ const ContactForm = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                     placeholder={t('form.phone.placeholder')}
                   />
                 </div>
@@ -200,7 +202,7 @@ const ContactForm = () => {
                     required
                     value={formData.projectType}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                   >
                     <option value="">{t('contact.form.selectDomain')}</option>
                     <option value="construction">{t('services.construction.title')}</option>
@@ -223,7 +225,7 @@ const ContactForm = () => {
                     name="projectLocation"
                     value={formData.projectLocation}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                     placeholder={t('contact.form.projectLocationPlaceholder')}
                   />
                 </div>
@@ -239,7 +241,7 @@ const ContactForm = () => {
                     name="budget"
                     value={formData.budget}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                   >
                     <option value="">{t('contact.form.selectBudget')}</option>
                     <option value="50k-200k">{t('form.budget.50k-200k')}</option>
@@ -259,7 +261,7 @@ const ContactForm = () => {
                     name="timeline"
                     value={formData.timeline}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-colors"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-all duration-200 bg-gray-50 focus:bg-white"
                   >
                     <option value="">{t('contact.form.selectTimeline')}</option>
                     <option value="urgent">{t('form.timeline.urgent')}</option>
@@ -282,7 +284,7 @@ const ContactForm = () => {
                   rows={4}
                   value={formData.description}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-colors resize-vertical"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-bordeaux-500 focus:border-bordeaux-500 transition-all duration-200 bg-gray-50 focus:bg-white resize-vertical"
                   placeholder={t('contact.form.descriptionPlaceholder')}
                 />
               </div>
@@ -290,7 +292,7 @@ const ContactForm = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-bordeaux-500 hover:bg-bordeaux-600 disabled:bg-bordeaux-300 text-white font-semibold px-8 py-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2"
+                className="w-full bg-bordeaux-500 hover:bg-bordeaux-600 disabled:bg-bordeaux-300 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300 transform hover:-translate-y-1 shadow-lg hover:shadow-xl disabled:transform-none disabled:shadow-lg flex items-center justify-center gap-3"
               >
                 {isSubmitting ? (
                   <>

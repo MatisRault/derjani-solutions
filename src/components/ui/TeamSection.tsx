@@ -22,11 +22,12 @@ interface TeamMember {
 
 const TeamCard = ({ member }: { member: TeamMember }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden group">
+    <div className="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 overflow-hidden group h-full border border-gray-100">
+      
       {/* Photo */}
-      <div className="relative h-80 overflow-hidden">
+      <div className="relative h-64 lg:h-72 overflow-hidden">
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-500 group-hover:scale-110"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105"
           style={{
             backgroundImage: `url('${member.image}')`
           }}
@@ -35,26 +36,28 @@ const TeamCard = ({ member }: { member: TeamMember }) => {
           <div className="absolute inset-0 bg-gradient-to-br from-bordeaux-500 to-bordeaux-700"></div>
         </div>
         
-        {/* Overlay au hover */}
-        <div className="absolute inset-0 bg-bordeaux-600/0 group-hover:bg-bordeaux-600/20 transition-all duration-300"></div>
+        {/* Overlay subtle */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent group-hover:from-black/40 transition-all duration-300"></div>
         
         {/* Badge département */}
-        <div className="absolute top-4 left-4 bg-bordeaux-500 text-white px-3 py-1 rounded-full text-xs font-medium">
+        <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-bordeaux-600 px-3 py-1 rounded-full text-xs font-semibold">
           {member.department}
         </div>
       </div>
       
       {/* Informations */}
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-gray-800 mb-1 group-hover:text-bordeaux-600 transition-colors">
-          {member.name}
-        </h3>
-        <p className="text-bordeaux-500 font-semibold mb-3">
-          {member.position}
-        </p>
-        <p className="text-gray-600 text-sm leading-relaxed">
-          {member.description}
-        </p>
+      <div className="p-6 flex flex-col h-40">
+        <div className="flex-1">
+          <h3 className="text-lg lg:text-xl font-bold text-gray-800 mb-1 group-hover:text-bordeaux-600 transition-colors line-clamp-1">
+            {member.name}
+          </h3>
+          <p className="text-bordeaux-500 font-semibold mb-3 text-sm line-clamp-1">
+            {member.position}
+          </p>
+          <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+            {member.description}
+          </p>
+        </div>
         
         {/* LinkedIn si disponible */}
         {member.linkedin && (
@@ -164,15 +167,15 @@ const TeamSection = () => {
   ];
 
   return (
-    <section className="w-full bg-gray-50 py-20">
-      <div className="px-32 sm:px-40 lg:px-48">
+    <section className="w-full bg-white py-16 lg:py-20">
+      <div className="px-4 sm:px-6 md:px-8 lg:px-32 xl:px-40 2xl:px-48">
         
         {/* En-tête */}
-        <div className="mb-16 flex justify-between items-start">
-          <h2 className="text-4xl lg:text-5xl font-bold text-bordeaux-600">
+        <div className="text-center mb-12 lg:mb-16">
+          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-gray-800 mb-4">
             {t('team.title')}
           </h2>
-          <p className="text-lg lg:text-xl text-gray-600 max-w-xl text-left">
+          <p className="text-base lg:text-lg xl:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             {t('team.subtitle')}
           </p>
         </div>
